@@ -2,8 +2,9 @@
 // Created by Severin on 15.11.2022.
 //
 
-#include "DataBase.h"
 #include <iostream>
+
+#include "DataBase.h"
 
 DataBase::DataBase(const std::string &t_filename)
 {
@@ -37,8 +38,9 @@ DataBase::~DataBase()
 
 void DataBase::checkErrors()
 {
-    if (!m_status.ok())
-        std::cerr << m_status.ToString() << std::endl; // TODO Logging
+    if (!m_status.ok()){
+        LOG(WARNING) << m_status.ToString() << std::endl;
+    }
 }
 
 void DataBase::Delete(const std::string &t_key)
@@ -51,4 +53,21 @@ void DataBase::Delete(const std::string &t_key)
 void DataBase::Synchronous(bool t_synchronous)
 {
     m_write_options.sync = t_synchronous;
+}
+
+void DataBase::Iterate(const std::function<void(const std::string&)> &f)
+{
+    leveldb::Iterator* it = m_db->NewIterator(m_read_options);
+
+    for (it->SeekToFirst(); it->Valid(); it->Next()) {
+        f(it->key().ToString());
+    }
+
+    if (!it->status().ok()){
+        LOG(WARNING) << it->status().ToString() << std::endl;
+    }
+
+    delete it;
+
+    checkErrors();
 }

@@ -2,16 +2,11 @@
 #include <vector>
 
 #include "DataBase.h"
+#include "Logger.h"
 
 int main()
 {
-    // Read all example // TODO implement in DataBase
-    // leveldb::Iterator* it = db->NewIterator(leveldb::ReadOptions());
-    // for (it->SeekToFirst(); it->Valid(); it->Next()) {
-    //     std::cout << it->key().ToString() << ": "  << it->value().ToString() << std::endl;
-    // }
-    // assert(it->status().ok());  // Check for any errors found during the scan
-    // delete it;
+    Logger::Init("./", "DataBase.log");
 
     DataBase data_base = DataBase("testdb");
     data_base.Put("key1", "data1");
@@ -27,6 +22,11 @@ int main()
 
     data_base.BachWrite(values.begin(), values.end(),
                         keys.begin(), keys.end());
+
+
+    data_base.Iterate([](const std::string& str){
+        LOG(INFO) << str << std::endl;
+    });
 
     return 0;
 }

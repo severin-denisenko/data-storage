@@ -1,3 +1,6 @@
 [submodule "dependencies/leveldb"]
 	path = dependencies/leveldb
 	url = https://github.com/google/leveldb.git
+[submodule "dependencies/g3log"]
+	path = dependencies/g3log
+	url = https://github.com/KjellKod/g3log.git

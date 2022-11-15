@@ -5,48 +5,48 @@
 #ifndef DATA_STORAGE_DATABASE_H
 #define DATA_STORAGE_DATABASE_H
 
-#include "leveldb/db.h"
-#include "leveldb/write_batch.h"
+#include <leveldb/db.h>
+#include <leveldb/write_batch.h>
 
-#include "glog/"
+#include "Logger.h"
 
 class DataBase
 {
 public:
     /**
-     * Creates database.
+     * @details Creates database.
      * @param filename Name of the database on disk
      */
     explicit DataBase(const std::string &filename);
 
     /**
-     * Puts value into database.
+     * @details Puts value into database.
      * @param t_key key string (Array of bytes)
      * @param t_value value string (Array of bytes)
      */
     void Put(const std::string &t_key, const std::string &t_value);
 
     /**
-     * Returns value by key from database.
+     * @details Returns value by key from database.
      * @param t_key key string (Array of bytes)
      * @return
      */
     std::string Get(const std::string &t_key);
 
     /**
-     * Removes value by key from database.
+     * @details Removes value by key from database.
      * @param t_key key string (Array of bytes)
      */
     void Delete(const std::string &t_key);
 
     /**
-     * Set Synchronous/Asynchronous Writes. By default is false.
+     * @details Set Synchronous/Asynchronous Writes. By default is false.
      * @param t_synchronous
      */
     void Synchronous(bool t_synchronous);
 
     /**
-     * Batch writes data.
+     * @details Batch writes data.
      * @tparam iter_type Vector, String, ets.
      * @param values_begin values.begin()
      * @param values_end values.end()
@@ -62,11 +62,12 @@ public:
         typename std::iterator_traits<iter_type>::difference_type t_n = std::distance(keys_begin, keys_end);
 
         if (n != t_n){
-            // TODO error
+            LOG(FATAL) << "Iterators for values and keys have to be equal length." << std::endl;
         }
 
         for (typename std::iterator_traits<iter_type>::difference_type i = 0; i < n; ++i)
         {
+            batch.Delete(keys_begin[i]);
             batch.Put(keys_begin[i], values_begin[i]);
         }
 
@@ -74,6 +75,12 @@ public:
 
         checkErrors();
     }
+
+    /**
+     * @details Iterates every element of database with lambda expression.
+     * @param f Lambda [](const std::string& str){ ... }
+     */
+    void Iterate(const std::function<void(const std::string&)>& f);
 
     ~DataBase();
 
