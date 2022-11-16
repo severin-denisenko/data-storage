@@ -7,6 +7,7 @@
 
 #include <leveldb/db.h>
 #include <leveldb/write_batch.h>
+#include <alpaca/alpaca.h>
 
 #include "Logger.h"
 
