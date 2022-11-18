@@ -2,15 +2,15 @@
 // Created by Severin on 16.11.2022.
 //
 
-#ifndef DATA_STORAGE_SERIALIZE_H
-#define DATA_STORAGE_SERIALIZE_H
+#ifndef DATA_STORAGE_SERIAL_H
+#define DATA_STORAGE_SERIAL_H
 
 #include <string>
 #include <alpaca/alpaca.h>
 
 #include "Logger.h"
 
-namespace Serialize{
+namespace Serial{
     /*
      * Container for Serializing / Deserializing any data
      */
@@ -50,4 +50,4 @@ namespace Serialize{
     }
 }
 
-#endif //DATA_STORAGE_SERIALIZE_H
+#endif //DATA_STORAGE_SERIAL_H

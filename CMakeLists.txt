@@ -13,7 +13,11 @@ include_directories(dependencies/leveldb/include)
 include_directories(dependencies/g3log/src)
 include_directories(dependencies/alpaca/include)
 
+set(Boost_USE_STATIC_LIBS   ON)
+set(Boost_USE_MULTITHREADED ON)
+find_package(Boost COMPONENTS system REQUIRED)
+
 add_executable(data_storage ${SRC} ${SRC})
 set_target_properties(data_storage PROPERTIES COMPILE_FLAGS "-Wall -Wextra -Wpedantic")
 
-target_link_libraries(data_storage leveldb g3log alpaca)
+target_link_libraries(data_storage leveldb g3log alpaca Boost::system)
